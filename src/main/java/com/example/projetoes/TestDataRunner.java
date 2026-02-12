@@ -3,9 +3,9 @@ package com.example.projetoes;
 import com.example.projetoes.domain.Docente;
 import com.example.projetoes.domain.Estudante;
 import com.example.projetoes.domain.UC;
-import com.example.projetoes.repository.DocenteRep;
-import com.example.projetoes.repository.EstudanteRep;
-import com.example.projetoes.repository.UCRep;
+import com.example.projetoes.dao.DocenteRep;
+import com.example.projetoes.dao.EstudanteRep;
+import com.example.projetoes.dao.UCRep;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.example.projetoes;
 
 import com.example.projetoes.domain.Docente;
-import com.example.projetoes.repository.DocenteRep;
+import com.example.projetoes.dao.DocenteRep;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
