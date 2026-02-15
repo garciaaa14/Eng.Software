@@ -29,15 +29,12 @@ public class TestDataRunner implements CommandLineRunner {
             return;
         }
 
-        // 1) Docente
         Docente d = new Docente("Prof A", "profA@escola.pt", "hash", "Informatica");
         docenteRep.save(d);
 
-        // 2) UC
         UC uc = new UC("Engenharia de Software", "2025/2026", d);
         ucRep.save(uc);
 
-        // 3) Estudante
         Estudante e1 = new Estudante("Aluno 1", "aluno1@escola.pt", "hash", "A123");
         e1.getUcs().add(uc);
         estudanteRep.save(e1);
@@ -46,6 +43,6 @@ public class TestDataRunner implements CommandLineRunner {
         e2.getUcs().add(uc);
         estudanteRep.save(e2);
 
-        System.out.println("✅ Inseridos: Docente, UC e 2 Estudantes. UC id=" + uc.getId());
+        System.out.println("Inseridos");
     }
 }

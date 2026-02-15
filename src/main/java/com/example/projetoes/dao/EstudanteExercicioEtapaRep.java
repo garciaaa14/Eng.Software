@@ -22,10 +22,17 @@ public interface EstudanteExercicioEtapaRep extends JpaRepository<EstudanteExerc
             "AND e.etapa.id = ?3")
     Optional<EstudanteExercicioEtapa> findByEstudanteExercicioEtapa(Long estudanteId, Long exercicioId, Long etapaId);
 
-    // Etapas concluídas (útil para calcular progresso)
+    // Etapas concluídas
     @Query("SELECT e FROM EstudanteExercicioEtapa e " +
             "WHERE e.estudanteExercicio.estudante.id = ?1 " +
             "AND e.estudanteExercicio.exercicio.id = ?2 " +
             "AND e.concluida = true")
     List<EstudanteExercicioEtapa> findConcluidasByEstudanteAndExercicio(Long estudanteId, Long exercicioId);
+
+    @Query("SELECT e FROM EstudanteExercicioEtapa e WHERE e.estudanteExercicio.id = ?1 AND e.etapa.id = ?2")
+    Optional<EstudanteExercicioEtapa> findByEeIdAndEtapaId(Long estudanteExercicioId, Long etapaId);
+
+    @Query("SELECT COUNT(e) FROM EstudanteExercicioEtapa e WHERE e.estudanteExercicio.id = ?1 AND e.concluida = true")
+    long countConcluidasByEeId(Long estudanteExercicioId);
+
 }

@@ -10,4 +10,8 @@ public interface EtapaRep extends JpaRepository<Etapa, Long> {
 
     @Query("SELECT e FROM Etapa e WHERE e.exercicio.id = ?1 ORDER BY e.ordem ASC")
     List<Etapa> findByExercicioIdOrderByOrdem(Long exercicioId);
+
+    @Query("SELECT COUNT(e) FROM Etapa e WHERE e.exercicio.id = ?1")
+    long countByExercicioId(Long exercicioId);
+
 }

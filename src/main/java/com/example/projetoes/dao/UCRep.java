@@ -20,4 +20,10 @@ public interface UCRep extends JpaRepository<UC, Long> {
     // Listar UCs onde um estudante está inscrito
     @Query("SELECT u FROM UC u JOIN u.alunos a WHERE a.id = ?1")
     List<UC> findByEstudanteId(Long estudanteId);
+
+    @Query("SELECT u FROM UC u JOIN FETCH u.alunos WHERE u.id = ?1")
+    Optional<UC> findByIdWithAlunos(Long id);
+
+
+
 }
