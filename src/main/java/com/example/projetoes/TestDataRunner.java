@@ -33,7 +33,7 @@ public class TestDataRunner implements CommandLineRunner {
     public void run(String... args) {
 
         if (docenteRep.count() > 0) {
-            System.out.println("ℹ️ Já existem dados. A saltar inserção.");
+            System.out.println("Já existem dados.");
             return;
         }
 
@@ -48,21 +48,33 @@ public class TestDataRunner implements CommandLineRunner {
 
         Docente d = new Docente("Prof A", "profA@escola.pt", passProf, "Informatica");
         d.getRoles().add(roleDocente);
-        docenteRep.save(d);
 
-        UC uc = new UC("Engenharia de Software", "2025/2026", d);
-        ucRep.save(uc);
+        UC uc1 = new UC("Engenharia de Software", "2025/2026", d);
+        UC uc2 = new UC("Sistemas Distribuidos", "2025/2026", d);
+
+        try {
+            d.getUcs().add(uc1);
+            d.getUcs().add(uc2);
+        } catch (Exception ignored) {
+        }
+
+        docenteRep.save(d);
+        ucRep.save(uc1);
+        ucRep.save(uc2);
 
         Estudante e1 = new Estudante("Aluno 1", "aluno1@escola.pt", passAluno, "A123");
         e1.getRoles().add(roleEstudante);
-        e1.getUcs().add(uc);
+        e1.getUcs().add(uc1);
+        e1.getUcs().add(uc2);
         estudanteRep.save(e1);
 
         Estudante e2 = new Estudante("Aluno 2", "aluno2@escola.pt", passAluno, "A124");
         e2.getRoles().add(roleEstudante);
-        e2.getUcs().add(uc);
+        e2.getUcs().add(uc1);
         estudanteRep.save(e2);
 
-        System.out.println("Inseridos: roles, docente, UC e 2 estudantes.");
+        System.out.println("Inseridos: roles, docente, 2 UCs e 2 estudantes.");
+        System.out.println("UC1 id: " + uc1.getId());
+        System.out.println("UC2 id: " + uc2.getId());
     }
 }

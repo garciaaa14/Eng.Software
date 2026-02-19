@@ -22,7 +22,6 @@ public class Etapa {
     private Exercicio exercicio;
 
     protected Etapa() {
-        // JPA
     }
 
     public Etapa(String descricao, Integer ordem, Exercicio exercicio) {

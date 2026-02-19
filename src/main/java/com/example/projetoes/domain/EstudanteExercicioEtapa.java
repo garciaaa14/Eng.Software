@@ -28,7 +28,6 @@ public class EstudanteExercicioEtapa {
     private Etapa etapa;
 
     protected EstudanteExercicioEtapa() {
-        // JPA
     }
 
     public EstudanteExercicioEtapa(EstudanteExercicio estudanteExercicio, Etapa etapa) {

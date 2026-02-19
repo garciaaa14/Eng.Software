@@ -35,17 +35,24 @@ public class EstudanteController {
     @GetMapping("/{id}/exercicios")
     public List<EstudanteExercicioDTO> exerciciosDoEstudante(@PathVariable Long id) {
         return estudanteExercicioRep.findByEstudanteId(id).stream()
-                .map(ee -> new EstudanteExercicioDTO(
-                        ee.getId(),
-                        ee.getEstudante().getId(),
-                        ee.getEstudante().getNome(),
-                        ee.getEstudante().getNumero(),
-                        ee.getExercicio().getId(),
-                        ee.getExercicio().getTitulo(),
-                        ee.isChamouDocente(),
-                        ee.isTerminado(),
-                        ee.getNota()
-                ))
+                .map(ee -> {
+                    var uc = ee.getExercicio().getUc();
+
+                    return new EstudanteExercicioDTO(
+                            ee.getId(),
+                            ee.getEstudante().getId(),
+                            ee.getEstudante().getNome(),
+                            ee.getEstudante().getNumero(),
+                            ee.getExercicio().getId(),
+                            ee.getExercicio().getTitulo(),
+                            uc.getId(),
+                            uc.getDesignacao(),
+                            ee.isChamouDocente(),
+                            ee.isTerminado(),
+                            ee.getNota()
+                    );
+                })
                 .toList();
     }
+
 }

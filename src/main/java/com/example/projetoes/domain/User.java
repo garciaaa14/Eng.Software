@@ -39,7 +39,6 @@ public abstract class User {
     private Set<Role> roles = new HashSet<>();
 
     protected User() {
-        // JPA
     }
 
     protected User(String nome, String email, String passwordHash) {

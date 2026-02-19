@@ -1,5 +1,6 @@
 package com.example.projetoes.controller;
 
+import com.example.projetoes.controller.dto.EtapaStatusDTO;
 import com.example.projetoes.controller.dto.ExercicioCreateDTO;
 import com.example.projetoes.controller.dto.ExercicioResponseDTO;
 import com.example.projetoes.controller.dto.EstudanteExercicioDTO;
@@ -7,6 +8,7 @@ import com.example.projetoes.domain.Exercicio;
 import com.example.projetoes.service.ExercicioService;
 import com.example.projetoes.service.dto.ProgressoAlunoDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +22,6 @@ public class ExercicioController {
     public ExercicioController(ExercicioService exercicioService) {
         this.exercicioService = exercicioService;
     }
-
 
     @PreAuthorize("hasRole('DOCENTE')")
     @PostMapping("/uc/{ucId}")
@@ -44,17 +45,22 @@ public class ExercicioController {
     @GetMapping("/{id}/progresso")
     public List<EstudanteExercicioDTO> verProgresso(@PathVariable Long id) {
         return exercicioService.getExecucoesDoExercicio(id).stream()
-                .map(ee -> new EstudanteExercicioDTO(
-                        ee.getId(),
-                        ee.getEstudante().getId(),
-                        ee.getEstudante().getNome(),
-                        ee.getEstudante().getNumero(),
-                        ee.getExercicio().getId(),
-                        ee.getExercicio().getTitulo(),
-                        ee.isChamouDocente(),
-                        ee.isTerminado(),
-                        ee.getNota()
-                ))
+                .map(ee -> {
+                    var uc = ee.getExercicio().getUc();
+                    return new EstudanteExercicioDTO(
+                            ee.getId(),
+                            ee.getEstudante().getId(),
+                            ee.getEstudante().getNome(),
+                            ee.getEstudante().getNumero(),
+                            ee.getExercicio().getId(),
+                            ee.getExercicio().getTitulo(),
+                            uc.getId(),
+                            uc.getDesignacao(),
+                            ee.isChamouDocente(),
+                            ee.isTerminado(),
+                            ee.getNota()
+                    );
+                })
                 .toList();
     }
 
@@ -66,8 +72,8 @@ public class ExercicioController {
 
     @PreAuthorize("hasRole('ESTUDANTE')")
     @PatchMapping("/execucao/{eeId}/etapa/{etapaId}/concluir")
-    public void concluirEtapa(@PathVariable Long eeId, @PathVariable Long etapaId) {
-        exercicioService.marcarEtapaConcluida(eeId, etapaId);
+    public void concluirEtapa(@PathVariable Long eeId, @PathVariable Long etapaId, Authentication auth) {
+        exercicioService.marcarEtapaConcluida(eeId, etapaId, auth.getName());
     }
 
     @PreAuthorize("hasRole('ESTUDANTE')")
@@ -83,5 +89,21 @@ public class ExercicioController {
             throw new IllegalArgumentException("A nota tem de estar entre 0 e 20");
         }
         exercicioService.atribuirNota(eeId, nota);
+    }
+
+    @PreAuthorize("hasRole('ESTUDANTE')")
+    @GetMapping("/execucao/{eeId}/etapas")
+    public List<EtapaStatusDTO> etapasDaExecucao(@PathVariable Long eeId, Authentication auth) {
+        String email = auth.getName();
+
+        return exercicioService.listarEtapasDaExecucao(eeId, email).stream()
+                .map(eee -> new EtapaStatusDTO(
+                        eee.getEtapa().getId(),
+                        eee.getEtapa().getOrdem(),
+                        eee.getEtapa().getDescricao(),
+                        eee.isConcluida(),
+                        eee.getDataConclusao()
+                ))
+                .toList();
     }
 }

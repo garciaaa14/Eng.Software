@@ -6,6 +6,9 @@ import com.example.projetoes.service.dto.ProgressoAlunoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,12 +53,22 @@ public class ExercicioService {
     }
 
     @Transactional
-    public void marcarEtapaConcluida(Long eeId, Long etapaId) {
-        EstudanteExercicioEtapa status = eeeRep.findByEeIdAndEtapaId(eeId, etapaId).orElseThrow();
+    public void marcarEtapaConcluida(Long eeId, Long etapaId, String email) {
+        EstudanteExercicio ee = eeRep.findById(eeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Execução não encontrada: " + eeId));
+
+        if (!ee.getEstudante().getEmail().equalsIgnoreCase(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esta execução não é do estudante autenticado.");
+        }
+
+        EstudanteExercicioEtapa status = eeeRep.findByEeIdAndEtapaId(eeId, etapaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada nessa execução."));
+
         status.setConcluida(true);
         status.setDataConclusao(LocalDateTime.now());
         eeeRep.save(status);
     }
+
 
     @Transactional
     public void chamarDocente(Long eeId) {
@@ -95,4 +108,17 @@ public class ExercicioService {
             );
         }).toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<EstudanteExercicioEtapa> listarEtapasDaExecucao(Long eeId, String email) {
+        EstudanteExercicio ee = eeRep.findById(eeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Execução não encontrada: " + eeId));
+
+        if (!ee.getEstudante().getEmail().equalsIgnoreCase(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Esta execução não é do estudante autenticado.");
+        }
+
+        return eeeRep.findByEeIdOrderByEtapaOrdem(eeId);
+    }
+
 }

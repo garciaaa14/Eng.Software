@@ -29,7 +29,6 @@ public class Estudante extends User {
     private Set<EstudanteExercicio> estudanteExercicios = new HashSet<>();
 
     protected Estudante() {
-        // JPA
     }
 
     public Estudante(String nome, String email, String passwordHash, String numero) {

@@ -42,7 +42,6 @@ public class Exercicio {
     private Set<EstudanteExercicio> estudanteExercicios = new HashSet<>();
 
     protected Exercicio() {
-        // JPA
     }
 
     public Exercicio(String titulo, String enunciado, UC uc) {

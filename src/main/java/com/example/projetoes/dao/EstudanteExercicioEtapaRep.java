@@ -9,30 +9,15 @@ import java.util.Optional;
 
 public interface EstudanteExercicioEtapaRep extends JpaRepository<EstudanteExercicioEtapa, Long> {
 
-    // Todas as etapas de um estudante num exercício
-    @Query("SELECT e FROM EstudanteExercicioEtapa e " +
-            "WHERE e.estudanteExercicio.estudante.id = ?1 " +
-            "AND e.estudanteExercicio.exercicio.id = ?2")
-    List<EstudanteExercicioEtapa> findByEstudanteAndExercicio(Long estudanteId, Long exercicioId);
-
-    // Um registo específico (estudante + exercicio + etapa)
-    @Query("SELECT e FROM EstudanteExercicioEtapa e " +
-            "WHERE e.estudanteExercicio.estudante.id = ?1 " +
-            "AND e.estudanteExercicio.exercicio.id = ?2 " +
-            "AND e.etapa.id = ?3")
-    Optional<EstudanteExercicioEtapa> findByEstudanteExercicioEtapa(Long estudanteId, Long exercicioId, Long etapaId);
-
-    // Etapas concluídas
-    @Query("SELECT e FROM EstudanteExercicioEtapa e " +
-            "WHERE e.estudanteExercicio.estudante.id = ?1 " +
-            "AND e.estudanteExercicio.exercicio.id = ?2 " +
-            "AND e.concluida = true")
-    List<EstudanteExercicioEtapa> findConcluidasByEstudanteAndExercicio(Long estudanteId, Long exercicioId);
-
     @Query("SELECT e FROM EstudanteExercicioEtapa e WHERE e.estudanteExercicio.id = ?1 AND e.etapa.id = ?2")
     Optional<EstudanteExercicioEtapa> findByEeIdAndEtapaId(Long estudanteExercicioId, Long etapaId);
 
     @Query("SELECT COUNT(e) FROM EstudanteExercicioEtapa e WHERE e.estudanteExercicio.id = ?1 AND e.concluida = true")
     long countConcluidasByEeId(Long estudanteExercicioId);
+
+    @Query("SELECT e FROM EstudanteExercicioEtapa e " +
+            "WHERE e.estudanteExercicio.id = ?1 " +
+            "ORDER BY e.etapa.ordem ASC")
+    List<EstudanteExercicioEtapa> findByEeIdOrderByEtapaOrdem(Long eeId);
 
 }

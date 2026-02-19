@@ -44,7 +44,6 @@ public class EstudanteExercicio {
     private List<EstudanteExercicioEtapa> etapasStatus = new ArrayList<>();
 
     protected EstudanteExercicio() {
-        // JPA
     }
 
     public EstudanteExercicio(Estudante estudante, Exercicio exercicio) {

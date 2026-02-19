@@ -7,6 +7,8 @@ public record EstudanteExercicioDTO(
         String estudanteNumero,
         Long exercicioId,
         String exercicioTitulo,
+        Long ucId,
+        String ucDesignacao,
         boolean chamouDocente,
         boolean terminado,
         Double nota

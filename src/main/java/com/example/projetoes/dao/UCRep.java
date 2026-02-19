@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UCRep extends JpaRepository<UC, Long> {
 
-    // Buscar UC por designação (útil para validação)
+    // Buscar UC por designação
     @Query("SELECT u FROM UC u WHERE u.designacao = ?1")
     Optional<UC> findByDesignacao(String designacao);
 

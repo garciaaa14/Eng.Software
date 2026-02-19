@@ -35,7 +35,6 @@ public class UC {
     private List<Exercicio> exercicios = new LinkedList<>();
 
     protected UC() {
-        // JPA
     }
 
     public UC(String designacao, String anoLetivo, Docente docente) {
