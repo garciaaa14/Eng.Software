@@ -9,6 +9,8 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -32,6 +34,11 @@ public class AuthController {
         UserDetails ud = userDetailsService.loadUserByUsername(req.email);
         String token = jwtTokenUtil.generateToken(ud);
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        List<String> roles = ud.getAuthorities().stream()
+                .map(a -> a.getAuthority())
+                .toList();
+
+        return ResponseEntity.ok(new LoginResponse(token, roles));
+
     }
 }
